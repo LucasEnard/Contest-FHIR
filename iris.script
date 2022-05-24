@@ -36,7 +36,7 @@
     set sc = ##class(App.Installer).setup() 
 
     zn "IRISAPP"
-    zw $SYSTEM.OBJ.ImportDir("/home/irisowner/fhirapp/src", "*.cls", "cubk", .tErrors, 1)
+    zw $SYSTEM.OBJ.ImportDir("/home/irisowner/fhirapp/src/python", "*.cls", "cubk", .tErrors, 1)
     zpm "install pex-embbeded-python"
 
     zw ##class(Grongier.PEX.Utils).RegisterComponent("bo","FhirClient","/home/irisowner/fhirapp/src/python/",1,"Python.FhirClient")

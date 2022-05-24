@@ -1,6 +1,7 @@
 FROM intersystemsdc/irishealth-community:latest
 
 COPY --chown=irisowner:irisowner ./data/fhir /home/irisowner/fhirdata
+COPY --chown=irisowner:irisowner ./ /home/irisowner/fhirapp/
 
 RUN \
 	--mount=type=bind,src=.,dst=/home/irisowner/fhirapp \
@@ -10,7 +11,7 @@ RUN \
 	iris session IRIS < /tmp/iris.script && \
 	iris stop iris quietly
 
-COPY --chown=irisowner:irisowner ./ /home/irisowner/fhirapp/
+
 RUN pip3 install -r /home/irisowner/fhirapp/src/python/requirements.txt
 
 ENV IRISUSERNAME "SuperUser"
