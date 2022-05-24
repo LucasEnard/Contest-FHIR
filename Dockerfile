@@ -1,19 +1,11 @@
-ARG IMAGE=intersystemsdc/irishealth-community:latest
-FROM $IMAGE
+FROM intersystemsdc/irishealth-community
 
-USER root
+COPY --chown=irisowner:irisowner ./data/fhir /home/irisowner/fhirdata
 
-WORKDIR /opt/irisapp
-RUN chown ${ISC_PACKAGE_MGRUSER}:${ISC_PACKAGE_IRISGROUP} /opt/irisapp
-
-USER ${ISC_PACKAGE_MGRUSER}
-
-COPY  src src
-COPY data/fhir fhirdata
-COPY iris.script /tmp/iris.script
-COPY fhirUI /usr/irissys/csp/user/fhirUI
-
-# run iris and initial 
-RUN iris start IRIS \
-	&& iris session IRIS < /tmp/iris.script \
-	&& iris stop iris quietly
+RUN \
+	--mount=type=bind,src=.,dst=/home/irisowner/fhirapp \
+	--mount=type=bind,src=iris.script,dst=/tmp/iris.script \
+	iris start IRIS && \
+	# iris session IRIS '##class(%ZPM.PackageManager).Shell("load /home/irisowner/fhirapp -v",1,1)' && \
+	iris session IRIS < /tmp/iris.script && \
+	iris stop iris quietly

@@ -3,7 +3,6 @@ set namespace="FHIRSERVER"
 Set appKey = "/fhir/r4"
 Set strategyClass = "HS.FHIRServer.Storage.Json.InteractionsStrategy"
 set metadataPackages = $lb("hl7.fhir.r4.core@4.0.1")
-set importdir="/opt/irisapp/src"
 
 //Install a Foundation namespace and change to it
 Do ##class(HS.HC.Util.Installer).InstallFoundation(namespace)
@@ -21,8 +20,8 @@ set config = strategy.GetServiceConfigData()
 set config.DebugMode = 4
 do strategy.SaveServiceConfigData(config)
 
-zw ##class(HS.FHIRServer.Tools.DataLoader).SubmitResourceFiles("/opt/irisapp/fhirdata/", "FHIRServer", appKey)
+// do ##class(HS.FHIRServer.Tools.DataLoader).SubmitResourceFiles("/home/irisowner/fhirdata/", "FHIRServer", "/fhir/r4")
 
-do $System.OBJ.LoadDir("/opt/irisapp/src","ck",,1)
-//zpm "install fhir-portal"
+zn "USER"
+zpm "load /home/irisowner/fhirapp":1
 halt
