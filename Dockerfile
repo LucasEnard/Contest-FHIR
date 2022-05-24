@@ -1,4 +1,4 @@
-FROM intersystemsdc/irishealth-community
+FROM intersystemsdc/irishealth-community:latest
 
 COPY --chown=irisowner:irisowner ./data/fhir /home/irisowner/fhirdata
 
@@ -9,3 +9,10 @@ RUN \
 	# iris session IRIS '##class(%ZPM.PackageManager).Shell("load /home/irisowner/fhirapp -v",1,1)' && \
 	iris session IRIS < /tmp/iris.script && \
 	iris stop iris quietly
+
+#COPY --chown=irisowner:irisowner ./src/python /home/irisowner/fhirapp/src/python
+#RUN pip3 install -r /src/python/requirements.txt
+
+ENV IRISUSERNAME "SuperUser"
+ENV IRISPASSWORD "SYS"
+ENV IRISNAMESPACE "IRISAPP"
