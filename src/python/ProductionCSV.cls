@@ -1,4 +1,4 @@
-Class python.ProductionCSV
+Class Python.ProductionCSV Extends Ens.Production
 {
 
 XData ProductionDefinition

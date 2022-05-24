@@ -10,8 +10,8 @@ RUN \
 	iris session IRIS < /tmp/iris.script && \
 	iris stop iris quietly
 
-#COPY --chown=irisowner:irisowner ./src/python /home/irisowner/fhirapp/src/python
-#RUN pip3 install -r /src/python/requirements.txt
+COPY --chown=irisowner:irisowner ./ /home/irisowner/fhirapp/
+RUN pip3 install -r /home/irisowner/fhirapp/src/python/requirements.txt
 
 ENV IRISUSERNAME "SuperUser"
 ENV IRISPASSWORD "SYS"

@@ -23,7 +23,7 @@ class ServiceCSV(BusinessService):
         :return: None
         """
         if not hasattr(self,'path'):
-            self.path = '/irisdev/app/misc/'
+            self.path = '/home/irisowner/fhirapp/misc/csv/'
         if not hasattr(self,'filename'):
             self.filename = 'Organization.csv'
         if not hasattr(self,'fhir_type'):
