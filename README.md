@@ -64,6 +64,13 @@ or from VSCode ObjectScript menu:
 While open the page you will see search result for female anemic patients and graphs a selected patient's hemoglobin values:
 <img width="484" alt="Screenshot 2020-08-06 at 18 51 22" src="https://user-images.githubusercontent.com/2781759/89657718-2b57d980-d8d6-11ea-800f-d09dfb48f8bc.png">
 
+## CSV to FHIR
+
+Situated at `src/python` we have a simple full python IRIS production that gather information from a CSV, use a DataTransformation to make it into a FHIR object and then, save that information to a FHIR server usin a FHIR client.
+
+To access it go to the management portal and load the production.
+
+For more information check the README.md inside the `src/python` folder.
 
 ## Development Resources
 [InterSystems IRIS FHIR Documentation](https://docs.intersystems.com/irisforhealth20203/csp/docbook/Doc.View.cls?KEY=HXFHIR)

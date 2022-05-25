@@ -7,8 +7,7 @@
 	// Update the 'dockerComposeFile' list if you have more compose files or use different names.
 	// The .devcontainer/docker-compose.yml file contains any overrides you need/want to make.
 	"dockerComposeFile": [
-		"../docker-compose.yml",
-		"docker-compose.yml"
+		"../docker-compose.yml"
 	],
 
 	// The 'service' property is the name of the service for the container that VS Code should
@@ -17,13 +16,37 @@
 
 	// The optional 'workspaceFolder' property is the path VS Code should open by default when
 	// connected. This is typically a file mount in .devcontainer/docker-compose.yml
-	"workspaceFolder": "/workspace",
+	"workspaceFolder": "/home/irisowner/fhirapp",
 
 	// Set *default* container specific settings.json values on container create.
-	"settings": {},
+	"settings": {
+		"objectscript.conn" :{
+			"server": "devcontainer",
+			"active": true
+		},
+		"intersystems.servers": {
+			"devcontainer": {
+				"username": "SuperUser",
+				"password": "SYS",
+				"webServer": {
+					"scheme": "http",
+					"host": "127.0.0.1",
+					"port": 52773
+				}
+			}
+		}
+	},
 
 	// Add the IDs of extensions you want installed when the container is created.
-	"extensions": []
+	"extensions": [
+		"ms-toolsai.jupyter",
+		"ms-toolsai.jupyter-renderers",
+		"ms-python.python",
+		"ms-python.vscode-pylance",
+		"intersystems-community.vscode-objectscript",
+        "intersystems.language-server",
+		"intersystems-community.servermanager",
+	]
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],

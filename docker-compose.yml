@@ -15,5 +15,4 @@ services:
       - iris session iris -U%SYS '##class(Security.Users).UnExpireUserPasswords("*")'
     volumes:
       - ./web:/usr/irissys/csp/fhirapp
-      - ./src:/home/irisowner/fhirapp/src
-      - ./misc:/home/irisowner/fhirapp/misc
+      - ./:/home/irisowner/fhirapp

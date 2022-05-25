@@ -96,7 +96,7 @@ class ResourceListView extends React.Component {
       .then(res => res.json())
       .then(({ entry, link }) => {
         const nextLink = (link.find(l => l.relation === 'next') || { url: '' }).url
-        const data = append ? [...this.state.data, ...entry] : entry
+        const data = append ? [...this.state.data, ...entry] : entry || []
         this.setState({ data, nextLink })
       })
   }
