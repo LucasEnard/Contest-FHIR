@@ -18,12 +18,12 @@ class ServiceCSV(BusinessService):
     def on_init(self):
         """
         It changes the current path to the file to the one specified in the path 
-        attribute of the object, or to '/irisdev/app/misc/' if no path attribute
+        attribute of the object, or to '/home/irisowner/fhirapp/python/csv/' if no path attribute
         is specified
         :return: None
         """
         if not hasattr(self,'path'):
-            self.path = '/home/irisowner/fhirapp/misc/csv/'
+            self.path = '/home/irisowner/fhirapp/python/csv/'
         if not hasattr(self,'filename'):
             self.filename = 'Organization.csv'
         if not hasattr(self,'fhir_type'):
@@ -49,8 +49,11 @@ class ServiceCSV(BusinessService):
         :param request: the request object
         :return: None
         """
+        # We open the file
         with open(self.path + self.filename,encoding="utf-8") as csv:
+            # We read it and map it using the object BaseOrganization from earlier
             reader = DataclassReader(csv, self.fhir_type ,delimiter=";")
+            # For each of those organization, we can create a request and send it to the process
             for row in reader:
                 msg = OrgaRequest()
                 msg.organization = row
