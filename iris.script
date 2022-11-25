@@ -1,27 +1,24 @@
-zn "HSLIB"
-set namespace="FHIRSERVER"
-Set appKey = "/fhir/r4"
-Set strategyClass = "HS.FHIRServer.Storage.Json.InteractionsStrategy"
-set metadataPackages = $lb("hl7.fhir.r4.core@4.0.1")
+    zn "HSLIB"
+    set namespace="FHIRSERVER"
+    Set appKey = "/fhir/r4"
+    Set strategyClass = "HS.FHIRServer.Storage.Json.InteractionsStrategy"
+    set metadataPackages = $lb("hl7.fhir.r4.core@4.0.1")
 
-//Install a Foundation namespace and change to it
-Do ##class(HS.HC.Util.Installer).InstallFoundation(namespace)
-zn namespace
+    //Install a Foundation namespace and change to it
+    Do ##class(HS.HC.Util.Installer).InstallFoundation(namespace)
+    zn namespace
 
-// Install elements that are required for a FHIR-enabled namespace
-Do ##class(HS.FHIRServer.Installer).InstallNamespace()
+    // Install elements that are required for a FHIR-enabled namespace
+    Do ##class(HS.FHIRServer.Installer).InstallNamespace()
 
-// Install an instance of a FHIR Service into the current namespace
-Do ##class(HS.FHIRServer.Installer).InstallInstance(appKey, strategyClass, metadataPackages)
+    // Install an instance of a FHIR Service into the current namespace
+    Do ##class(HS.FHIRServer.Installer).InstallInstance(appKey, strategyClass, metadataPackages)
 
-// Configure FHIR Service instance to accept unauthenticated requests
-set strategy = ##class(HS.FHIRServer.API.InteractionsStrategy).GetStrategyForEndpoint(appKey)
-set config = strategy.GetServiceConfigData()
-set config.DebugMode = 4
-do strategy.SaveServiceConfigData(config)
+    // Configure FHIR Service instance to accept unauthenticated requests
+    set strategy = ##class(HS.FHIRServer.API.InteractionsStrategy).GetStrategyForEndpoint(appKey)
+    set config = strategy.GetServiceConfigData()
+    set config.DebugMode = 4
+    do strategy.SaveServiceConfigData(config)
 
-// do ##class(HS.FHIRServer.Tools.DataLoader).SubmitResourceFiles("/home/irisowner/fhirdata/", "FHIRServer", "/fhir/r4")
-
-zn "USER"
-zpm "load /home/irisowner/fhirapp":1
-halt
+    do ##class(HS.FHIRServer.Tools.DataLoader).SubmitResourceFiles("/home/irisowner/fhirdata/", "FHIRServer", "/fhir/r4")
+    halt
