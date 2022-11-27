@@ -1,12 +1,28 @@
-FROM intersystemsdc/irishealth-community
+ARG IMAGE=intersystemsdc/irishealth-community:latest
+FROM $IMAGE
 
-COPY --chown=irisowner:irisowner ./data/fhir /home/irisowner/fhirdata
-COPY --chown=irisowner:irisowner ./e2e-tests/data/R4 /home/irisowner/fhirdata
+USER root
 
-RUN \
-	--mount=type=bind,src=.,dst=/home/irisowner/fhirapp \
-	--mount=type=bind,src=./iris.script,dst=/tmp/iris.script \
-	iris start IRIS && \
-	# iris session IRIS '##class(%ZPM.PackageManager).Shell("load /home/irisowner/fhirapp -v",1,1)' && \
-	iris session IRIS < /tmp/iris.script && \
-	iris stop iris quietly
+ENV DEBIAN_FRONTEND noninteractive
+
+# Update package and install sudo
+RUN apt-get update && apt-get install -y \
+	nano \
+	sudo && \
+	/bin/echo -e ${ISC_PACKAGE_MGRUSER}\\tALL=\(ALL\)\\tNOPASSWD: ALL >> /etc/sudoers && \
+	sudo -u ${ISC_PACKAGE_MGRUSER} sudo echo enabled passwordless sudo-ing for ${ISC_PACKAGE_MGRUSER}
+
+WORKDIR /irisdev/app
+RUN chown ${ISC_PACKAGE_MGRUSER}:${ISC_PACKAGE_IRISGROUP} /irisdev/app
+USER ${ISC_PACKAGE_MGRUSER}
+
+COPY . /irisdev/app
+
+RUN pip3 install -r requirements.txt
+# load demo stuff
+RUN iris start IRIS \
+	&& iris session IRIS < /irisdev/app/iris.script && iris stop IRIS quietly
+
+ENV IRISUSERNAME "SuperUser"
+ENV IRISPASSWORD "SYS"
+ENV IRISNAMESPACE "IRISAPP"
