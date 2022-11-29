@@ -141,10 +141,10 @@ We will now create an analysis of our FHIR repo, then a projection, and finally 
 
 ### 5.2.1. FHIR ANALYSIS
 
-img 1
+![1](https://user-images.githubusercontent.com/77791586/204558884-9c3b51e1-16de-441d-9ad5-aff0e6ad2109.jpg)
 
 
-img 2
+![2](https://user-images.githubusercontent.com/77791586/204558942-197dbb4c-0cb0-48ce-b69c-a61212f137c2.jpg)
 
 Here, enter :
 
@@ -173,7 +173,8 @@ It's possible to use any FHIR server here, and the configuration given in this G
 
 ### 5.2.2. FHIR PROJECTION
 
-img 3
+![3](https://user-images.githubusercontent.com/77791586/204559000-7cfb456b-334c-4f3a-8364-f2387ae4c4bc.jpg)
+
 
 We have prepared a simple and easy projection from FHIR to SQL.<br>
 Click `import` and select `Contest-FHIR/misc/ExportFHIRtoSQL.json`.
@@ -188,7 +189,8 @@ Press `Import`.
 
 ### 5.2.3. PROJECTION TO SQL
 
-img 4
+![4](https://user-images.githubusercontent.com/77791586/204559031-c5061cb7-8cbf-4432-8625-8ca8fd9dc272.jpg)
+
 
 Then press `Launch Projection`
 
@@ -202,7 +204,8 @@ You can access the SQL server following this link :
 
 See also :
 
-img 5
+![5](https://user-images.githubusercontent.com/77791586/204559061-e1a65630-ccc0-4c03-a9f1-78629d9e8bb7.jpg)
+
 
 You can clearly see the generated information presented here but also our two Organization added in the beginning.
 
@@ -215,7 +218,7 @@ For that follow this link :<br>
 
 From here, you can, using the incredible `sqlalchemy` tool, plug into our SQL IRIS DataBase and 'play' with our data while having everything protected and stored in FHIR, the future of the Health industry storage.
 
-img 6
+![6](https://user-images.githubusercontent.com/77791586/204559085-9d6e3f83-31d2-4ba8-ac2d-4a3666507e57.jpg)
 
 You can easily imagine plugging behind this a Machine Learning model, or a deep analysis of our data using all the wonderful Python tools.
 
