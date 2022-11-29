@@ -30,11 +30,12 @@ I didn't have the time to create a csv about women's health, but you can easily 
     - [5.2.3. PROJECTION TO SQL](#523-projection-to-sql)
     - [5.2.4. SQL ?](#524-sql-)
   - [5.3. SQL TO JUPYTER](#53-sql-to-jupyter)
-- [6. Creation of a new DataTransformation](#6-creation-of-a-new-datatransformation)
-- [7. What's inside the repo](#7-whats-inside-the-repo)
-  - [7.1. Dockerfile](#71-dockerfile)
-  - [7.2. .vscode/settings.json](#72-vscodesettingsjson)
-  - [7.3. .vscode/launch.json](#73-vscodelaunchjson)
+- [6. Conclusion](#6-conclusion)
+- [7. Creation of a new DataTransformation](#7-creation-of-a-new-datatransformation)
+- [8. What's inside the repo](#8-whats-inside-the-repo)
+  - [8.1. Dockerfile](#81-dockerfile)
+  - [8.2. .vscode/settings.json](#82-vscodesettingsjson)
+  - [8.3. .vscode/launch.json](#83-vscodelaunchjson)
 
 # 2. Prerequisites
 Make sure you have [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) and [Docker desktop](https://www.docker.com/products/docker-desktop) installed.
@@ -223,7 +224,18 @@ From here, you can, using the incredible `sqlalchemy` tool, plug into our SQL IR
 You can easily imagine plugging behind this a Machine Learning model, or a deep analysis of our data using all the wonderful Python tools.
 
 
-# 6. Creation of a new DataTransformation
+# 6. Conclusion
+
+I hope you are all convinced by now of the power of this tool.<br>
+
+If you want to sell InterSystems to your clients this the demo you need !<br>
+Fast data integration to an IRIS FHIR server, fast and realiable conversion from FHIR to SQL then all the data inside a Python NoteBook in a Pandas DataFrame, ready to be worked on by our best data analyst or to be used a fuel to your best Machine learning models !!!
+
+Special thanks to [Guillaume Rongier](!https://github.com/grongierisc), [Evgeny Shvarov](!https://github.com/evshvarov), [Dmitry Zasypkin](!https://github.com/dmitry-zasypkin) and [Dmitry Maslennikov ](![Dmitry Maslennikov](https://github.com/daimor)) as I'm using tools from them like the FHIR SQL BUILDER, the SQLALCHEMY module in Python or the incredible [interoperability-embedded-python](!https://github.com/grongierisc/interoperability-embedded-python) from Guillaume Rongier. Without this last tool nothing of what I've did would work since I know almost nothing in ObjectScript and this allowed me to continue participating in the Dev Community.
+
+Thanks again everyone.
+
+# 7. Creation of a new DataTransformation
 This repository is ready to code in VSCode with InterSystems plugins.
 Open `/src/python` to start coding or using the autocompletion.
 
@@ -305,16 +317,16 @@ Now if you go into the management portal and change the setting of the `ServiceC
 
 ![Settings](https://user-images.githubusercontent.com/77791586/170278879-02eb4303-51af-45ba-93bf-393e9ff5ed94.png)
 
-# 7. What's inside the repo
+# 8. What's inside the repo
 
-## 7.1. Dockerfile
+## 8.1. Dockerfile
 
 The simplest dockerfile to start a Python container.<br>
 Use `docker-compose up` to build and reopen your file in the container to work inside of it.
 
-## 7.2. .vscode/settings.json
+## 8.2. .vscode/settings.json
 
 Settings file.
 
-## 7.3. .vscode/launch.json
+## 8.3. .vscode/launch.json
 Config file if you want to debug.
