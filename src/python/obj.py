@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-# Here you can add your own classes like BasePatient, BaseObservation, etc
+# Here you can add your own classes like Patient, Observation, etc
 # to prepare a new DataTransformation
 
 @dataclass
@@ -8,6 +8,7 @@ from dataclasses import dataclass
 class BaseOrganization:
     active:bool = None
     name:str = None
+    id:int = None
     city:str = None
     country:str = None
     system:str = None

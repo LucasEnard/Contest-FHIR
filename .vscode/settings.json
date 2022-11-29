@@ -5,14 +5,35 @@
         "iris.script": "objectscript"
       },
     "objectscript.conn" :{
-      "ns": "IRISAPP",
-      "username": "SuperUser",
+      "ns": "FHIRSERVER",
+      "active": true,
+      "username": "_SYSTEM",
       "password": "SYS",
       "docker-compose": {
         "service": "iris",
         "internalPort": 52773
       },
-      "active": true
-    }
+      "links": {
+        "FHIR SQL Demo": "http://localhost:${port}/csp/fhirsql/index.csp",
+        "SQL Query": "http://localhost:33783/csp/sys/exp/%25CSP.UI.Portal.SQL.Home.zen?$NAMESPACE=FHIRSERVER",
+        "FHIR server test": "http://localhost:${port}/fhir/r4/metadata",
+        "Notebook": "http://localhost:8888"
+      }
+    },
+    "sqltools.connections": [
+      {
+        "askForPassword": false,
+        "connectionMethod": "Server and Port",
+        "driver": "InterSystems IRIS",
+        "name": "iris-fhir-template",
+        "namespace": "FHIRSERVER",
+        "password": "SYS",
+        "port": 32783,
+        "previewLimit": 50,
+        "server": "localhost",
+        "showSystem": false,
+        "username": "_SYSTEM"
+      }
+    ]
 
 }

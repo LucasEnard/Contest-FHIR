@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Export generator="Cache" version="25">
+  <Document name="contest-fhir.ZPM">
+    <Module>
+      <Name>Contest FHIR CSV/FHIR/SQL/JUPYTER</Name>
+      <Version>1.0.0</Version>
+      <Description>CSV to FHIR to SQL to JUPYTER</Description>
+      <Keywords>CSV,FHIR,SQL,JUPYTER</Keywords>
+      <Packaging>module</Packaging>
+      <CSPApplication
+        Url="/fhirUI"
+        SourcePath="/fhirUI"
+        DeployPath="{$cspdir}/fhirUI"
+        ServeFiles="1"
+        Recurse="1"
+        CookiePath="/fhirUI"
+       />
+    </Module>
+  </Document>
+</Export>

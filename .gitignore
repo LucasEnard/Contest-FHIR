@@ -1,2 +1,7 @@
 .DS_Store
+profile/
+.venv
 __pycache__
+iris-main.log
+waitISC.log
+.ipynb_checkpoints

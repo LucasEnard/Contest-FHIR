@@ -1,6 +1,16 @@
 # 1. Contest-FHIR
-This is a full python IRIS production that gather information from a csv, use a DataTransformation to make it into a FHIR object and then, save that information to a FHIR server.
-This use interop as well as FHIR.
+
+*** CSV TO FHIR TO SQL TO JUPYTER ***
+
+This is a full python IRIS production that gather information from a csv, use a DataTransformation to make it into a FHIR object, save that information to a FHIR server.
+From here we can use the SQL BUILDER TOOL to transform our FHIR DataBase to a SQL DataBase in order to analyze or to implement machine learning. 
+For the latter, we can use the implemented JUPYTER connection to our server that will help use get all the information from our FHIR server to a DataFrame Pandas in Python notebook.
+From here doing machine learning is quite easy !!!
+
+In conclusion, in a few clicks you'll be able to transform your CSV to a FHIR server, then to an SQL server then analyze this server using Pandas in Jupyter Python !
+
+
+This use interop, FHIR, SQL, and Jupyter.
 The objective is to help people understand how easy it is to use FHIR.
 I didn't have the time to create a csv about women's health, but you can easily imagine this application using a csv on Women's Health.
 
@@ -12,11 +22,14 @@ I didn't have the time to create a csv about women's health, but you can easily 
   - [3.3. Having the folder open inside the container](#33-having-the-folder-open-inside-the-container)
 - [4. FHIR server](#4-fhir-server)
 - [5. Walkthrough](#5-walkthrough)
-  - [5.1. Messages and objects](#51-messages-and-objects)
-  - [5.2. Business Service](#52-business-service)
-  - [5.3. Business Process](#53-business-process)
-  - [5.4. Business Operation](#54-business-operation)
-  - [5.5. Conclusion of the walkthrough](#55-conclusion-of-the-walkthrough)
+  - [CSV TO FHIR](#csv-to-fhir)
+    - [FHIR ?](#fhir-)
+  - [FHIR TO SQL](#fhir-to-sql)
+    - [FHIR ANALYSIS](#fhir-analysis)
+    - [FHIR PROJECTION](#fhir-projection)
+    - [PROJECTION TO SQL](#projection-to-sql)
+    - [SQL ?](#sql-)
+  - [SQL TO JUPYTER](#sql-to-jupyter)
 - [6. Creation of a new DataTransformation](#6-creation-of-a-new-datatransformation)
 - [7. What's inside the repo](#7-whats-inside-the-repo)
   - [7.1. Dockerfile](#71-dockerfile)
@@ -58,7 +71,7 @@ This app will periodically read any csv inside the "csv" folder and will send it
 
 This repository is ready for [VS Code](https://code.visualstudio.com/).
 
-Open the locally-cloned `fhir-client-python` folder in VS Code.
+Open the locally-cloned `Contest-FHIR` folder in VS Code.
 
 If prompted (bottom right corner), install the recommended extensions.
 
@@ -83,123 +96,128 @@ By opening the folder remote you enable VS Code and any terminals you open withi
 To complete this walktrough we will use a fhir server.<br>
 This fhir server was already build-in when you cloned and build the container.
 
-The url is `localhost:52773/fhir/r4`
+The url is `localhost:52773/fhir/r4` inside the container and `localhost:33783/fhir/r4` on your machine.
 
 # 5. Walkthrough
 Complete walkthrough of the Python IRIS production.
 
+## CSV TO FHIR
 
-## 5.1. Messages and objects
-Objects and messages will hold the information between our services,processes and opeartions.<br>
+Here you must use the ProductionCSV and change the parameters if needed to transform any CSV file added to the `data/in` folder to your FHIR server.
 
-In the `obj.py` file we have to create a dataclass that match the csv, this will be used to hold the information before doing the DataTransformation.<br>
-In our example the organization.csv csv looks like this,<br>
-```
-active;name;city;country;system;value
-true;Name1;city1;country1;phone;050678504
-false;Name2;city2;country2;phone;123456789
-```
+This link will help you load the ProductionCSV, change the parameters if needed and start it :<br>
+`http://localhost:33783/csp/healthshare/fhirserver/EnsPortal.ProductionConfig.zen?$NAMESPACE=FHIRSERVER&$NAMESPACE=FHIRSERVER&`
 
-Therefore, the object will look like this,<br>
-```python
-@dataclass
-# > This class represents a simple organization
-class BaseOrganization:
-    active:bool = None
-    name:str = None
-    city:str = None
-    country:str = None
-    system:str = None
-    value:str = None
-```
+Connect using :<br>
+username : `superuser`<br>
+password : `SYS`
 
-In the `msg.py` file, we will have two type of request, the first one hold information of an organization before the DataTransformation and the second one can hold the information of the organization after the DataTransformation.
+Go to `Action` in the far right menu, then click `Open` then choose `Python` and `ProducitonCSV` !
 
-## 5.2. Business Service
-In the `bs.py` file we have the code that allows us to read the csv and for each row of the csv ( so for each organization ), map it into an object we created earlier.
-Then, for each of those row ( organization ) we create a request and send it to our process to do the DataTransformation.
+Now START the production.
 
-```python
-# We open the file
-with open(self.path + self.filename,encoding="utf-8") as csv:
-    # We read it and map it using the object BaseOrganization from earlier
-    reader = DataclassReader(csv, self.fhir_type ,delimiter=";")
-    # For each of those organization, we can create a request and send it to the process
-    for row in reader:
-        msg = OrgaRequest()
-        msg.organization = row
-        self.send_request_sync('Python.ProcessCSV',msg)
-```
-
-## 5.3. Business Process
-In the `bp.py` file we have the DataTransformation, converting a simple python object holding little information to a FHIR R4 object.
-
-Here are the steps to do a DataTransformation using embedded python on our simple organization,<br>
-```python
-# Creation of the object Organization
-organization = Organization()
-
-# Mapping of the information from the request to the Organization object
-organization.name = base_orga.name
-
-organization.active = base_orga.active
-
-## Creation of the Address object and mapping of the information 
-## from the request to the Address object
-adress = Address()
-adress.country = base_orga.country
-adress.city = base_orga.city
-
-### Setting the adress of our organization to the one we created
-organization.address = [adress]
-
-## Creation of the ContactPoint object and mapping of the
-## information from the request to the ContactPoint object
-telecom = ContactPoint()
-telecom.value = base_orga.value
-telecom.system = base_orga.system
-
-### Setting the telecom of our organization to the one we created
-organization.telecom = [telecom]
-
-# Now, our DT is done, we have an object organization that is a 
-# FHIR R4 object and holds all of our csv information.
-```
-
-After that, our mapping is done and our DT is working.<br>
-Now, we can send this newly created FHIR R4 resource to our FhirClient that is our operation.
-
-## 5.4. Business Operation
-In the `bo.py` file we have the FhirClient, this client creates a connection to a fhir server that will hold the information gathered through the csv.
-
-In this example, we use a local fhir server who doesn't need an api key to connect.<br>
-To connect to it we have to use in the on_init function,<br>
-```python
-if not hasattr(self,'url'):
-    self.url = 'localhost:52773/fhir/r4'
-
-self.client = SyncFHIRClient(url=self.url)
-```
-
-Now, when we receive a message/request, we can, by finding the resource type of the resource we send with our request to the client, create an object readable by the client, and then save it to the fhir server.
-```python
-# Get the resource type from the request ( here "Organization" )
-resource_type = request.resource["resource_type"]
-
-# Create a resource of this type using the request's data
-resource = construct_fhir_element(resource_type, request.resource)
-
-# Save the resource to the FHIR server using the client
-self.client.resource(resource_type,**json.loads(resource.json())).save()
-```
+Just by loading it and starting it, the production should automatically load a really simple csv file containing information on some organizations to our FHIR server.
 
 
-It is to be noted that the fhir client works with any resource from FHIR R4 and to use and change our example, we only need to change the DataTransformation and the object the holds the csv information.
+**Note** :<br>
+If you want to do it with others fhir resources [you need to create a new Data Transfomation](#6-creation-of-a-new-datatransformation) and create a new message type.
+
+### FHIR ?
+We now have a FHIR server ( That was pre-filled with random generated Organization and Patient ) that also contains our 2 new organizations !!
+All that from a simple click in the Production.
+
+## FHIR TO SQL
 
 
-## 5.5. Conclusion of the walkthrough
+Here we will use a powerful InterSystems tool that allows us to transform any FHIR server to an SQL server and perform some more transformation on the data if needed !<br>
+For that follow :<br>
+`http://localhost:33783/csp/fhirsql/index.csp/`
 
-If you have followed this walkthrough you now know exactly how to read a csv of a represetation of a FHIR R4 resource, use a DataTransformation to make it into a real FHIR R4 object and save it to a server.
+Connect using :<br>
+username : `superuser`<br>
+password : `SYS`
+
+We will now create an analysis of our FHIR repo, then a projection, and finally we will convert it to SQL.
+
+### FHIR ANALYSIS
+
+img 1
+
+
+img 2
+
+Here, enter :
+
+Name : Local_FHIR
+
+Host : localhost
+
+Port : 52773
+
+SSL conf : *don't touch*
+
+Credentials : Press new and add a new credentials like <br>
+name : `superuser`<br>
+username : `superuser`<br>
+password : `SYS`
+
+FHIR Repository URL : /fhir/r4
+
+And press OK.
+
+Now enter 100 in `Selectivity Percentage` and press `Launch Analysis Task`.
+
+
+**Note**<br>
+It's possible to use any FHIR server here, and the configuration given in this GitHub is just for our InterSystems local FHIR server ( Note that you could use also a cloud InterSystems FHIR server )
+
+### FHIR PROJECTION
+
+img 3
+
+We have prepared a simple and easy projection from FHIR to SQL.<br>
+Click `import` and select `Contest-FHIR/misc/ExportFHIRtoSQL.json`.
+
+Select :
+
+Name : T1
+
+Analysis : Local_FHIR
+
+Press `Import`.
+
+### PROJECTION TO SQL
+
+img 4
+
+Then press `Launch Projection`
+
+### SQL ?
+
+We now have an SQL server ( That was pre-filled with random generated Organization and Patient ) that also contains our 2 new organizations !!
+All that from simples steps using the FHIR SQL BUILDER from InterSystems.
+
+You can access the SQL server following this link :
+`http://localhost:33783/csp/sys/exp/%25CSP.UI.Portal.SQL.Home.zen?$NAMESPACE=FHIRSERVER`
+
+See also :
+
+img 5
+
+You can clearly see the generated information presented here but also our two Organization added in the beginning.
+
+## SQL TO JUPYTER
+
+Now that we have done CSV to FHIR to SQL, we need to gather the information from this SQL server to our Jupyter NoteBook.
+
+For that follow this link :<br>
+`http://localhost:8888/notebooks/SqlAlchemy.ipynb`
+
+From here, you can, using the incredible `sqlalchemy` tool, plug into our SQL IRIS DataBase and 'play' with our data while having everything protected and stored in FHIR, the future of the Health industry storage.
+
+img 6
+
+You can easily imagine plugging behind this a Machine Learning model, or a deep analysis of our data using all the wonderful Python tools.
 
 
 # 6. Creation of a new DataTransformation

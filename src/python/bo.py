@@ -8,22 +8,20 @@ from fhir.resources import construct_fhir_element
 import json
 
 class FhirClient(BusinessOperation):
-    client: SyncFHIRClient = None
 
     def on_init(self):
         """
-        It changes the current url if needed using the params of the
+        It changes the current url and api-key if needed using the params of the
         management portal
 
         :return: None
         """
         if not hasattr(self,'url'):
             self.url = 'http://localhost:52773/fhir/r4'
+        if not hasattr(self,'apikey'):
+            self.apikey = "sVgCTspDTM4iHGn51K5JsaXAwJNmHkSG3ehxindk"
 
-        self.client = SyncFHIRClient(url=self.url,extra_headers={"Content-Type":"application/json+fhir"})
-
-        # Using an InterSystems server that need an api key, using the header x-api-key
-        #self.client = SyncFHIRClient(url='https://fhir.8ty581k3dgzj.static-test-account.isccloud.io', extra_headers={"x-api-key":"sVgCTspDTM4iHGn51K5JsaXAwJNmHkSG3ehxindk"})
+        self.client = SyncFHIRClient(url=self.url, extra_headers={"x-api-key":self.apikey,"Content-Type":"application/json+fhir"})
 
         return None
 
@@ -46,7 +44,6 @@ class FhirClient(BusinessOperation):
 
         # Save the resource to the FHIR server using the client
         self.client.resource(resource_type,**json.loads(resource.json())).save()
-
         return None
 
     def on_message(self, request):

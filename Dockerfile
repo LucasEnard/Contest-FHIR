@@ -1,12 +1,13 @@
-ARG IMAGE=intersystemsdc/irishealth-community:latest
+ARG IMAGE=intersystemsdc/irishealth-community:preview
 FROM $IMAGE
 
 USER root
 
-ENV DEBIAN_FRONTEND noninteractive
+#COPY key/iris.key /usr/irissys/mgr/iris.key
 
 # Update package and install sudo
 RUN apt-get update && apt-get install -y \
+	git \
 	nano \
 	sudo && \
 	/bin/echo -e ${ISC_PACKAGE_MGRUSER}\\tALL=\(ALL\)\\tNOPASSWD: ALL >> /etc/sudoers && \
@@ -16,13 +17,22 @@ WORKDIR /irisdev/app
 RUN chown ${ISC_PACKAGE_MGRUSER}:${ISC_PACKAGE_IRISGROUP} /irisdev/app
 USER ${ISC_PACKAGE_MGRUSER}
 
-COPY . /irisdev/app
+COPY . .
+COPY data/fhir fhirdata
+COPY iris.script /tmp/iris.script
+COPY fhirUI /usr/irissys/csp/user/fhirUI
 
 RUN pip3 install -r requirements.txt
-# load demo stuff
-RUN iris start IRIS \
-	&& iris session IRIS < /irisdev/app/iris.script && iris stop IRIS quietly
 
+ENV PYTHON_PATH=/usr/irissys/bin/irispython
 ENV IRISUSERNAME "SuperUser"
 ENV IRISPASSWORD "SYS"
-ENV IRISNAMESPACE "IRISAPP"
+ENV IRISNAMESPACE "FHIRSERVER"
+
+# run iris and initial 
+RUN iris start IRIS \
+	&& iris session IRIS < /tmp/iris.script \
+	&& /usr/irissys/bin/irispython /irisdev/app/src/register.py \
+	&& iris stop IRIS quietly
+
+ENTRYPOINT [ "/tini", "--", "/irisdev/app/entrypoint.sh" ]
