@@ -22,14 +22,14 @@ I didn't have the time to create a csv about women's health, but you can easily 
   - [3.3. Having the folder open inside the container](#33-having-the-folder-open-inside-the-container)
 - [4. FHIR server](#4-fhir-server)
 - [5. Walkthrough](#5-walkthrough)
-  - [CSV TO FHIR](#csv-to-fhir)
-    - [FHIR ?](#fhir-)
-  - [FHIR TO SQL](#fhir-to-sql)
-    - [FHIR ANALYSIS](#fhir-analysis)
-    - [FHIR PROJECTION](#fhir-projection)
-    - [PROJECTION TO SQL](#projection-to-sql)
-    - [SQL ?](#sql-)
-  - [SQL TO JUPYTER](#sql-to-jupyter)
+  - [5.1. CSV TO FHIR](#51-csv-to-fhir)
+    - [5.1.1. FHIR ?](#511-fhir-)
+  - [5.2. FHIR TO SQL](#52-fhir-to-sql)
+    - [5.2.1. FHIR ANALYSIS](#521-fhir-analysis)
+    - [5.2.2. FHIR PROJECTION](#522-fhir-projection)
+    - [5.2.3. PROJECTION TO SQL](#523-projection-to-sql)
+    - [5.2.4. SQL ?](#524-sql-)
+  - [5.3. SQL TO JUPYTER](#53-sql-to-jupyter)
 - [6. Creation of a new DataTransformation](#6-creation-of-a-new-datatransformation)
 - [7. What's inside the repo](#7-whats-inside-the-repo)
   - [7.1. Dockerfile](#71-dockerfile)
@@ -101,7 +101,7 @@ The url is `localhost:52773/fhir/r4` inside the container and `localhost:33783/f
 # 5. Walkthrough
 Complete walkthrough of the Python IRIS production.
 
-## CSV TO FHIR
+## 5.1. CSV TO FHIR
 
 Here you must use the ProductionCSV and change the parameters if needed to transform any CSV file added to the `data/in` folder to your FHIR server.
 
@@ -122,11 +122,11 @@ Just by loading it and starting it, the production should automatically load a r
 **Note** :<br>
 If you want to do it with others fhir resources [you need to create a new Data Transfomation](#6-creation-of-a-new-datatransformation) and create a new message type.
 
-### FHIR ?
+### 5.1.1. FHIR ?
 We now have a FHIR server ( That was pre-filled with random generated Organization and Patient ) that also contains our 2 new organizations !!
 All that from a simple click in the Production.
 
-## FHIR TO SQL
+## 5.2. FHIR TO SQL
 
 
 Here we will use a powerful InterSystems tool that allows us to transform any FHIR server to an SQL server and perform some more transformation on the data if needed !<br>
@@ -139,7 +139,7 @@ password : `SYS`
 
 We will now create an analysis of our FHIR repo, then a projection, and finally we will convert it to SQL.
 
-### FHIR ANALYSIS
+### 5.2.1. FHIR ANALYSIS
 
 img 1
 
@@ -171,7 +171,7 @@ Now enter 100 in `Selectivity Percentage` and press `Launch Analysis Task`.
 **Note**<br>
 It's possible to use any FHIR server here, and the configuration given in this GitHub is just for our InterSystems local FHIR server ( Note that you could use also a cloud InterSystems FHIR server )
 
-### FHIR PROJECTION
+### 5.2.2. FHIR PROJECTION
 
 img 3
 
@@ -186,13 +186,13 @@ Analysis : Local_FHIR
 
 Press `Import`.
 
-### PROJECTION TO SQL
+### 5.2.3. PROJECTION TO SQL
 
 img 4
 
 Then press `Launch Projection`
 
-### SQL ?
+### 5.2.4. SQL ?
 
 We now have an SQL server ( That was pre-filled with random generated Organization and Patient ) that also contains our 2 new organizations !!
 All that from simples steps using the FHIR SQL BUILDER from InterSystems.
@@ -206,7 +206,7 @@ img 5
 
 You can clearly see the generated information presented here but also our two Organization added in the beginning.
 
-## SQL TO JUPYTER
+## 5.3. SQL TO JUPYTER
 
 Now that we have done CSV to FHIR to SQL, we need to gather the information from this SQL server to our Jupyter NoteBook.
 
