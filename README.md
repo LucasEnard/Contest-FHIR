@@ -121,7 +121,7 @@ Just by loading it and starting it, the production should automatically load a r
 
 
 **Note** :<br>
-If you want to do it with others fhir resources [you need to create a new Data Transfomation](#6-creation-of-a-new-datatransformation) and create a new message type.
+If you want to do it with others fhir resources [you need to create a new Data Transfomation](#7-creation-of-a-new-datatransformation) and create a new message type.
 
 ### 5.1.1. FHIR ?
 We now have a FHIR server ( That was pre-filled with random generated Organization and Patient ) that also contains our 2 new organizations !!
